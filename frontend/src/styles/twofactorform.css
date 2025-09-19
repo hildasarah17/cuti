@@ -1,0 +1,175 @@
+/* Full reset background putih */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: white !important;
+  font-family: Arial, sans-serif;
+}
+
+/* Wrapper full layar */
+.twofactor-form-wrapper {
+  display: flex;
+  justify-content: center;  /* center horizontal */
+  align-items: center;      /* center vertical */
+  min-height: 100vh;
+  background: white;
+}
+
+/* Container full tengah */
+.form-container {
+    position: relative; /* penting supaya panah bisa absolute */
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* isi ke tengah */
+  justify-content: center;
+  width: 100%;
+  max-width: 800px;
+  padding: 40px;
+  text-align: center;   /* teks judul & deskripsi ke tengah */
+}
+
+/* Panah kembali */
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+}
+
+/* Judul */
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  color: black;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Deskripsi bold + rata tengah */
+.description {
+  font-weight: bold;
+  color: black;
+  margin-bottom: 30px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Kotak abu-abu */
+.form-box {
+  background: #f2f2f2;
+  padding: 30px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 600px;   /* biar ga terlalu melebar */
+  text-align: left;   /* form tetap rapi kiri */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* opsional: efek elegan */
+}
+
+/* Pertanyaan + input */
+.form-group {
+  margin-bottom: 30px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: black;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  color: black;
+}
+
+/* Tombol simpan ke kanan */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-save {
+  background: #28a745;
+  border: none;
+  padding: 10px 20px;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* Overlay popup */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* transparan hitam */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Kotak modal */
+.modal-box {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Tombol di modal */
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+/* Teks di modal */
+.modal-box p {
+  font-size: 16px;
+  font-weight: 500;
+  color: black;   /* pastikan hitam biar kelihatan */
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+
+.btn-cancel {
+  background: #ff3b30;
+  border: none;
+  padding: 10px 30px;
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.btn-cancel:hover {
+  background: #e02e25;
+}
+
+.btn-confirm {
+  background: #28a745;
+  border: none;
+  padding: 10px 30px;
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.btn-save:hover {
+  background: #218838;
+}

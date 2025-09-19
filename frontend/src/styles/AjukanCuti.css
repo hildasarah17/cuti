@@ -1,0 +1,247 @@
+/* Scoped khusus halaman Ajukan Cuti */
+.ajukan-cuti-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: #ececec;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* Sidebar */
+.ajukan-cuti-page .sidebar {
+  width: 220px;
+  background: #d35400;
+  color: white;
+  padding: 20px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ajukan-cuti-page .sidebar .logo img {
+  width: 120px;
+  margin-bottom: 30px;
+}
+
+.ajukan-cuti-page .sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.ajukan-cuti-page .sidebar ul li {
+  margin: 10px 0;
+}
+
+.ajukan-cuti-page .sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.ajukan-cuti-page .sidebar ul li a:hover,
+.ajukan-cuti-page .sidebar ul li.active a {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(5px);
+}
+
+/* Content */
+.ajukan-cuti-page .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+}
+
+/* Header */
+.ajukan-cuti-page .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #303030;
+  padding: 0 20px;
+  height: 100px;
+  color: white;
+}
+
+.ajukan-cuti-page .header h2 {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.ajukan-cuti-page .header-right {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.ajukan-cuti-page .notif-icon {
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.ajukan-cuti-page .notif-icon:hover {
+  color: #f39c12;
+}
+
+.ajukan-cuti-page .user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: white;
+}
+
+.ajukan-cuti-page .user-btn img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+/* Form Wrapper */
+.ajukan-cuti-page .form-wrapper {
+  padding: 30px 50px;
+  color: #000;
+}
+
+.ajukan-cuti-page .form-wrapper h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.ajukan-cuti-page .form-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 25px 30px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ajukan-cuti-page .form-card h4 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #070707;
+}
+
+/* Form Grid */
+.ajukan-cuti-page .form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  color: #000;
+}
+
+.ajukan-cuti-page select {
+  color: #000; /* teks dalam select hitam */
+}
+
+.ajukan-cuti-page select option {
+  color: #000; /* pilihan dropdown juga hitam */
+}
+
+.ajukan-cuti-page .form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.ajukan-cuti-page .form-group.small {
+  max-width: 120px;
+}
+
+.ajukan-cuti-page .form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #444;
+}
+
+.ajukan-cuti-page .form-group p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #000;
+}
+
+/* Input, Select, Textarea */
+.ajukan-cuti-page input,
+.ajukan-cuti-page select,
+.ajukan-cuti-page textarea {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: 0.3s;
+  background: #fff;
+}
+
+.ajukan-cuti-page input:focus,
+.ajukan-cuti-page select:focus,
+.ajukan-cuti-page textarea:focus {
+  border-color: #d35400;
+  box-shadow: 0px 0px 5px rgba(211, 84, 0, 0.5);
+}
+
+.ajukan-cuti-page input::placeholder,
+.ajukan-cuti-page select::placeholder,
+.ajukan-cuti-page textarea::placeholder {
+  color: #555;
+  opacity: 0.8;
+}
+
+.ajukan-cuti-page .form-row.full .form-group {
+  flex: 1;
+}
+
+/* Actions */
+.ajukan-cuti-page .form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.ajukan-cuti-page .btn-cancel,
+.ajukan-cuti-page .btn-submit {
+  padding: 10px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  transition: all 0.3s;
+}
+
+.ajukan-cuti-page .btn-cancel {
+  background: #cb1919;
+  color: #fff;
+}
+
+.ajukan-cuti-page .btn-cancel:hover {
+  background: #e02626;
+  transform: translateY(-2px);
+}
+
+.ajukan-cuti-page .btn-submit {
+  background: #149047;
+  color: #fff;
+}
+
+.ajukan-cuti-page .btn-submit:hover {
+  background: #25d76f;
+  transform: translateY(-2px);
+}

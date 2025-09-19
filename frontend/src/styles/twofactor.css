@@ -1,0 +1,90 @@
+.twofactor-container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  padding: 24px;
+  box-sizing: border-box;
+  position: relative;
+  font-family: "Poppins", sans-serif;
+}
+
+.back-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: #333;
+}
+
+.content-box {
+  margin: auto;
+  max-width: 600px;
+  text-align: center;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #222;
+}
+
+.description {
+  font-size: 15px;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 36px;
+}
+
+.btn-enable {
+  background-color: #28a745; /* hijau */
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 28px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color .2s;
+}
+
+/* Tombol nyalakan (hijau) */
+.btn-enable {
+  background: #28a745;
+  border: none;
+  padding: 12px 30px;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-enable:hover {
+  background: #218838;
+}
+
+/* Tombol matikan (merah) */
+.btn-disable {
+  background: #dc3545;
+  border: none;
+  padding: 12px 30px;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-disable:hover {
+  background: #c82333;
+}
+
+
+.btn-enable:hover {
+  background-color: #218838;
+}

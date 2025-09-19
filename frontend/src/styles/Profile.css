@@ -1,0 +1,288 @@
+@import "./ApprovalPage.css";
+
+/* ===================== */
+/* Wrapper halaman Profile*/
+/* ===================== */
+.profile-page-wrapper {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: rgb(215, 213, 213);
+}
+
+/* ===================== */
+/* Sidebar */
+/* ===================== */
+.profile-page-wrapper .sidebar {
+  width: 220px;
+  background: #d35400;
+  color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.profile-page-wrapper .sidebar .logo img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 30px;
+}
+
+.profile-page-wrapper .sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.profile-page-wrapper .sidebar ul li {
+  margin: 15px 0;
+}
+
+.profile-page-wrapper .sidebar ul li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #ffffff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.profile-page-wrapper .sidebar ul li a:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.profile-page-wrapper .sidebar ul li.active,
+.profile-page-wrapper .sidebar ul li a:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+/* ===================== */
+/* Content wrapper */
+/* ===================== */
+.profile-page-wrapper .content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #d1d1d1;
+}
+
+/* ===================== */
+/* Header */
+/* ===================== */
+.profile-page-wrapper .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #303030;
+  padding: 0 20px;
+  height: 100px;
+  color: white;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.profile-page-wrapper .header h2 {
+  margin: 0;
+}
+
+.profile-page-wrapper .header-right {
+  display: flex;
+  align-items: center;
+  gap: 80px;
+}
+
+.profile-page-wrapper .notif-icon {
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+}
+
+.profile-page-wrapper .user-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.profile-page-wrapper .user-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.profile-page-wrapper .user-btn img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+}
+
+/* ===================== */
+/* Main content khusus profile card */
+/* ===================== */
+.profile-page {
+  flex: 1;
+  padding: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.profile-page .profile-card {
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 950px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* ===================== */
+/* Profile header (avatar + nama) */
+/* ===================== */
+.profile-card .profile-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.profile-card .profile-header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.profile-card .profile-header p {
+  margin: 5px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Avatar */
+.profile-card .avatar-wrapper {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.profile-card .profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #f0f0f0;
+}
+
+.profile-card .edit-avatar {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: #f8f6f5;
+  color: rgb(12, 12, 12);
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+  border: 2px solid #fff;
+  transition: background 0.3s;
+}
+
+.profile-card .edit-avatar:hover {
+  background: #e67e22;
+}
+
+/* ===================== */
+/* Grid untuk data */
+/* ===================== */
+.profile-card .profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.profile-card .profile-grid .full-width {
+  grid-column: span 2;
+}
+
+/* Box untuk tiap data */
+.profile-card .profile-box {
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-card .profile-box label {
+  font-size: 12px;
+  color: #999;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.profile-card .profile-box p {
+  margin: 0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Input dengan icon edit/save */
+.profile-card .input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-card .input-group input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+}
+
+.profile-card .input-group .icon {
+  cursor: pointer;
+  color: #555;
+  transition: color 0.3s;
+}
+
+.profile-card .input-group .icon:hover {
+  color: #d35400;
+}
+
+.error-text {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.feedback-text {
+  color: red !important;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}
+
+.feedback-success {
+  color: green !important;
+  font-size: 0.85rem;
+  margin-top: 5px;
+}

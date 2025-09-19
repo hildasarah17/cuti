@@ -1,0 +1,210 @@
+/* ===== Layout & base ===== */
+* { box-sizing: border-box; }
+body, html {
+  margin: 0; padding: 0;
+  font-family: "Inter", Arial, sans-serif;
+  background: #fafafa;
+  color: #0a0b0b;
+}
+
+/* ===== Dashboard layout ===== */
+.dashboard {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ===== Sidebar (fixed) ===== */
+.sidebar {
+  width: 240px;
+  background: #c75c30;
+  color: #fff;
+  padding: 24px 16px;
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .logo { text-align: center; margin-bottom: 28px; }
+.sidebar .logo img { width: 110px; }
+
+.sidebar ul { list-style: none; padding: 0; margin: 0; }
+.sidebar ul li { margin-bottom: 12px; }
+.sidebar ul li a {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; color: #ffffff; text-decoration: none;
+  border-radius: 6px;
+}
+.sidebar ul li.active a,
+.sidebar ul li a:hover {
+  background: #303030; color: #fff;
+}
+
+/* ===== Main area ===== */
+.content {
+  margin-left: 240px; /* leave space for sidebar */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  background: #303030; 
+  padding: 0 20px; 
+  height: 100px; 
+  color: white; 
+  margin: 0; 
+  flex-shrink: 0; 
+} 
+.header h2 { 
+  margin: 0; 
+} 
+
+/* kanan header (notif + user) */
+.header-right { 
+  display: flex; 
+  align-items: center; 
+  gap: 20px; /* jarak antara notif & user */ 
+} 
+
+/* notif icon */
+.notif-icon { 
+  font-size: 22px;   /* lebih kecil biar proporsional */
+  cursor: pointer; 
+  color: white; 
+} 
+
+/* user container */
+.header .user { 
+  display: flex; 
+  align-items: center; 
+} 
+
+/* foto user */
+.header .user img { 
+  width: 32px;    /* diperkecil dari 40px */
+  height: 32px; 
+  border-radius: 50%; 
+  object-fit: cover; 
+  border: 2px solid #f7f5f4; 
+}
+
+/* ===== Main content wrapper ===== */
+.main-content {
+  padding: 28px;
+  overflow-y: auto;
+}
+
+/* ===== Page title (above welcome card) ===== */
+.page-title {
+  margin: 0 0 18px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #0c0c0c;
+}
+
+/* ===== Greeting section (welcome card + total) ===== */
+.greeting-section {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+.greeting {
+  flex: 1;
+  display: flex;
+  gap: 20px;
+  background: #e6e6e6;
+  padding: 22px;
+  border-radius: 12px;
+  align-items: center;
+}
+
+.greeting img { width: 120px; border-radius: 10px; object-fit: cover; }
+.greeting h3 { margin: 0 0 6px 0; font-size: 20px; }
+.greeting p { margin: 0; color: #000000; line-height: 1.5; }
+
+.total-card {
+  width: 220px;
+  background: #e6e6e6;
+  border-radius: 12px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding: 18px;
+}
+.total-card p { margin: 0; color: #111827; }
+.total-card h2 { margin: 12px 0; font-size: 36px; }
+
+/* ===== Section title (outside table) ===== */
+.section-title {
+  margin: 30px 0 12px 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ===== Table wrapper (light gray box) ===== */
+.approval-table {
+  background: #f3f4f6; /* abu-abu ringan di luar table */
+  border-radius: 8px;
+  padding: 10px;
+  overflow: hidden;
+}
+
+/* ===== Actual table styling ===== */
+.approval-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* header: oranye */
+.approval-table thead tr {
+  background: #c75c30; /* warna oranye/coklat tua */
+  color: #000000;
+}
+.approval-table th {
+  padding: 14px 16px;
+  font-weight: 600;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* round top corners for the header row */
+.approval-table thead th:first-child { border-top-left-radius: 6px; }
+.approval-table thead th:last-child  { border-top-right-radius: 6px; }
+
+/* body rows */
+.approval-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eef2f6;
+  color: #374151;
+  font-size: 14px;
+}
+
+/* striped rows */
+.approval-table tbody tr:nth-child(odd)  { background: #fff; }
+.approval-table tbody tr:nth-child(even) { background: #fbfbfb; }
+
+/* do not use strong hover highlight — keep subtle */
+.approval-table tbody tr:hover { background: #fff; }
+
+/* status colors (apply via className in JSX) */
+.status-menunggu { color: #d97706; font-weight:600; }
+.status-disetujui { color: #16a34a; font-weight:600; }
+.status-ditolak { color: #dc2626; font-weight:600; }
+
+
+/* responsive small screens */
+@media (max-width: 900px) {
+  .greeting-section { flex-direction: column; }
+  .total-card { width: 100%; }
+  .content { margin-left: 0; }
+  .sidebar { position: relative; width: 100%; height: auto; display:flex; flex-direction:row; gap:12px; padding:12px; }
+}

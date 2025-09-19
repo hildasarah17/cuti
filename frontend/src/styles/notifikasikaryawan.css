@@ -1,0 +1,98 @@
+/* src/styles/notifikasi.css */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f4f4f4;
+  min-height: 100vh;
+}
+
+.header {
+  background: #333;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.notif-icon {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.user img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.main-content {
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+
+.page-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.notif-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+}
+
+.notif-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  width: 100%;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.notif-card.success {
+  border-left: 6px solid #4caf50;
+}
+.notif-card.danger {
+  border-left: 6px solid #f44336;
+}
+.notif-card.warning {
+  border-left: 6px solid #ff9800;
+}
+
+.notif-icon {
+  font-size: 22px;
+}
+
+.notif-body h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.notif-body p {
+  margin: 5px 0 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.notif-date {
+  margin-left: auto;
+  font-size: 12px;
+  color: #888;
+}
