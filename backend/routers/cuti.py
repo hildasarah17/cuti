@@ -116,6 +116,7 @@ def hitung_jumlah(data: HitungCutiRequest):
 #--------------------------------
 #TABLE DATA CUTI
 #---------------------------------
+
 @router.get("/list")
 def list_cuti(
     page: int = Query(1, ge=1),
@@ -311,3 +312,4 @@ def ajukan_cuti(data: AjukanCutiRequest, request: Request):
     finally:
         cursor.close()
         db.close()
+        

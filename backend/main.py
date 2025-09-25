@@ -7,6 +7,8 @@ import routers.auth as auth
 import routers.cuti as cuti
 import routers.approve as approve
 import routers.profile as profile
+import routers.dashboard as dashboard
+
 
 # Inisialisasi App
 app = FastAPI(
@@ -32,6 +34,8 @@ app.include_router(auth.router)
 app.include_router(cuti.router)
 app.include_router(approve.router)
 app.include_router(profile.router)
+app.include_router(dashboard.router)
+
 
 # Root Endpoint
 @app.get("/")
