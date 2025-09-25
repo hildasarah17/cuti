@@ -57,14 +57,21 @@ export default function LoginPage({ onLogin }) {
 
       console.log("Login sukses:", data);
 
-      // Simpan id_karyawan untuk 2FA
+      // Simpan id_karyawan & login status
       localStorage.setItem("id_karyawan", data.user.id_karyawan);
-      localStorage.removeItem("twoFactorVerified"); 
+      localStorage.setItem("isLoggedIn", "true");
 
       if (onLogin) onLogin();
 
-      // Redirect ke halaman 2FA
-      navigate("/twofactor");
+      // 🔑 Ikuti instruksi backend
+      if (data.next_step === "dashboard") {
+        localStorage.setItem("twoFactorVerified", "true");
+        navigate("/beranda");
+      } else if (data.next_step === "2fa") {
+        localStorage.removeItem("twoFactorVerified");
+        navigate("/twofactor/form");
+      }
+
     } catch (err) {
       console.error("Error koneksi:", err);
       setErrorMessage("🚨 Terjadi kesalahan koneksi ke server");

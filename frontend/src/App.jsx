@@ -18,13 +18,18 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isTwoFactorVerified, setIsTwoFactorVerified] = useState(false);
 
-  // cek localStorage saat pertama kali load
   useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn");
     const twoFactorStatus = localStorage.getItem("twoFactorVerified");
+
+    if (loggedIn === "true") {
+      setIsLoggedIn(true);
+    }
     if (twoFactorStatus === "true") {
       setIsTwoFactorVerified(true);
     }
   }, []);
+
 
   // simpan ke localStorage kalau 2FA sudah diaktifkan
   const handleTwoFactorVerified = () => {
@@ -41,14 +46,9 @@ function App() {
         {/* Login */}
         <Route
           path="/login"
-          element={
-          isLoggedIn ? (
-          <Navigate to="/twofactor" />   // 👈 selalu lempar ke halaman 2FA dulu
-          ) : (
-          <LoginPage onLogin={() => setIsLoggedIn(true)} />
-       )
-     }
-    />
+          element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+        />
+
 
 
         {/* Two Factor: langkah 1 */}

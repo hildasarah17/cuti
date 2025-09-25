@@ -9,10 +9,50 @@ export default function ResetPassword() {
   const [showPopup, setShowPopup] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [idKaryawan, setIdKaryawan] = useState(false); 
-  const handleSubmit = (e) => {
+
+  // Ambil id dari localStorage yang di-set di TwoFactorFormReset
+  const [idKaryawan] = useState(localStorage.getItem("resetId") || "");
+
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowPopup(true);
+
+    if (!idKaryawan) {
+      setError("ID Karyawan tidak ditemukan. Silakan ulangi proses.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Konfirmasi password tidak cocok.");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8000/auth/reset-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_karyawan: idKaryawan,
+          password_baru: password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.detail || "Gagal reset password");
+        return;
+      }
+
+      // Jika sukses
+      setShowPopup(true);
+      localStorage.removeItem("resetId"); // hapus biar aman
+    } catch (err) {
+      setError("Terjadi kesalahan server");
+    }
   };
 
   return (
@@ -34,20 +74,23 @@ export default function ResetPassword() {
             sebelumnya demi keamanan.
           </p>
 
-          {/* ID Karyawan */}
+          {/* ID Karyawan (read-only biar user tahu ID nya) */}
           <div className="input-wrapper">
-          <input
-          type="text"
-          placeholder="Masukkan ID Karyawan"
-          required
-          />
-        </div>
+            <input
+              type="text"
+              value={idKaryawan}
+              readOnly
+            />
+          </div>
+
           {/* Kata sandi baru */}
           <div className="input-wrapper">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Masukkan kata sandi baru"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             {showPassword ? (
               <EyeOff
@@ -68,6 +111,8 @@ export default function ResetPassword() {
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Konfirmasi kata sandi baru"
               required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             {showConfirmPassword ? (
               <EyeOff
@@ -82,6 +127,8 @@ export default function ResetPassword() {
             )}
           </div>
 
+          {error && <p className="error-message">{error}</p>}
+
           <button type="submit" className="reset-btn">
             Perbarui
           </button>
@@ -89,35 +136,35 @@ export default function ResetPassword() {
       </div>
 
       {/* Popup Sukses */}
-{showPopup && (
-  <div className="popup-overlay">
-    <div className="popup-box">
-      <div className="success-circle">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="48"
-          height="48"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#4a6eff"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M9 12l2 2 4-4" />
-        </svg>
-      </div>
-      <h2 className="popup-title">Berhasil</h2>
-      <p className="popup-desc">
-        Selamat! Kata sandi Anda telah diubah. Klik lanjutkan untuk masuk.
-      </p>
-      <button className="btn-continue" onClick={() => navigate("/")}>
-        Lanjutkan
-       </button>
-      </div>
-    </div>
-    )}
+      {showPopup && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <div className="success-circle">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#4a6eff"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M9 12l2 2 4-4" />
+              </svg>
+            </div>
+            <h2 className="popup-title">Berhasil</h2>
+            <p className="popup-desc">
+              Selamat! Kata sandi Anda telah diubah. Klik lanjutkan untuk masuk.
+            </p>
+            <button className="btn-continue" onClick={() => navigate("/")}>
+              Lanjutkan
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

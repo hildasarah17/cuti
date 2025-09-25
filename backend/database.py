@@ -2,7 +2,7 @@ import mysql.connector
 
 def get_db():
     """
-    Membuat koneksi ke database MySQL lembur
+    Membuat koneksi ke database MySQL cuti
     """
     return mysql.connector.connect(
         host="localhost",

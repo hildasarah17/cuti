@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   FaHome,
   FaClipboardList,
@@ -17,27 +17,116 @@ import "../styles/AjukanCuti.css";
 
 export default function AjukanCuti() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // state untuk tanggal dan jumlah
+  const [idKaryawan] = useState(localStorage.getItem("id_karyawan") || "");
+  const [nama, setNama] = useState("");
+  const [divisi, setDivisi] = useState("");
+
+  const [jenisCuti, setJenisCuti] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [jumlah, setJumlah] = useState(0);
+  const [keterangan, setKeterangan] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // fungsi hitung otomatis
-  const calculateDays = (start, end) => {
-    if (start && end) {
-      const startObj = new Date(start);
-      const endObj = new Date(end);
-      if (endObj >= startObj) {
-        const diff =
-          Math.ceil((endObj - startObj) / (1000 * 60 * 60 * 24)) + 1;
-        setJumlah(diff);
+  useEffect(() => {
+    if (!idKaryawan) return;
+    // fetch profile
+    fetch("http://localhost:8000/cuti/me", {
+      headers: { "X-Id-Karyawan": idKaryawan },
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d && d.karyawan) {
+          setNama(d.karyawan.nama);
+          setDivisi(d.karyawan.divisi);
+        }
+      })
+      .catch((e) => {
+        console.error("Error fetch profile:", e);
+      });
+  }, [idKaryawan]);
+
+  // hitung via backend agar konsisten
+  const calculateDaysBackend = async (start, end) => {
+    if (!start || !end) {
+      setJumlah(0);
+      return;
+    }
+    setLoading(true);
+    try {
+      const resp = await fetch("http://localhost:8000/cuti/hitung", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Id-Karyawan": idKaryawan,
+        },
+        body: JSON.stringify({
+          tanggal_mulai: start,
+          tanggal_akhir: end,
+        }),
+      });
+      const data = await resp.json();
+      if (resp.ok && data.status === "success") {
+        setJumlah(data.jumlah);
       } else {
         setJumlah(0);
       }
-    } else {
-      setJumlah(0);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // onchange tanggal -> hitung backend
+  const onStartChange = (e) => {
+    const s = e.target.value;
+    setStartDate(s);
+    calculateDaysBackend(s, endDate);
+  };
+  const onEndChange = (e) => {
+    const en = e.target.value;
+    setEndDate(en);
+    calculateDaysBackend(startDate, en);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    if (!jenisCuti) { setError("Pilih jenis cuti"); return; }
+    if (!startDate || !endDate) { setError("Isi tanggal mulai & selesai"); return; }
+    if (jumlah <= 0) { setError("Jumlah hari cuti harus > 0"); return; }
+
+    try {
+      const resp = await fetch("http://localhost:8000/cuti/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Id-Karyawan": idKaryawan,
+        },
+        body: JSON.stringify({
+          id_jenis_cuti: parseInt(jenisCuti),
+          tanggal_mulai: startDate,
+          tanggal_akhir: endDate,
+          keterangan,
+        }),
+      });
+      const data = await resp.json();
+      if (!resp.ok) {
+        setError(data.detail || "Gagal mengajukan cuti");
+        return;
+      }
+      alert("Pengajuan cuti berhasil. ID: " + data.data.id_cuti);
+      // redirect ke Data Cuti atau reset form
+      navigate("/data-cuti");
+    } catch (err) {
+      console.error(err);
+      setError("Terjadi kesalahan koneksi");
     }
   };
 
@@ -90,30 +179,36 @@ export default function AjukanCuti() {
             <h3>Ajukan Cuti</h3>
             <div className="form-card">
               <h4>Form Pengajuan Cuti</h4>
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div className="form-row">
                   <div className="form-group">
                     <label>ID Karyawan</label>
-                    <p>1002387651</p>
+                    <p>{idKaryawan || "-"}</p>
                   </div>
                   <div className="form-group">
                     <label>Nama Karyawan</label>
-                    <p>Samsul Sodiqin</p>
+                    <p>{nama || "-"}</p>
                   </div>
                 </div>
 
                 <div className="form-row">
                   <div className="form-group">
                     <label>Divisi</label>
-                    <p>Marketing</p>
+                    <p>{divisi || "-"}</p>
                   </div>
                   <div className="form-group">
                     <label>Jenis Cuti</label>
-                    <select>
-                      <option>--- Pilih Jenis Cuti ---</option>
-                      <option>Cuti Tahunan</option>
-                      <option>Cuti Sakit</option>
-                      <option>Cuti Melahirkan</option>
+                    <select
+                      value={jenisCuti}
+                      onChange={(e) => setJenisCuti(e.target.value)}
+                      name="jenis_cuti"
+                      id="jenis_cuti"
+                    >
+                      <option value="">--- Pilih Jenis Cuti ---</option>
+                      <option value="1">Cuti Tahunan</option>
+                      <option value="2">Cuti Sakit</option>
+                      <option value="3">Cuti Melahirkan</option>
+                      <option value="4">Cuti Menikah</option>
                     </select>
                   </div>
                 </div>
@@ -124,10 +219,7 @@ export default function AjukanCuti() {
                     <input
                       type="date"
                       value={startDate}
-                      onChange={(e) => {
-                        setStartDate(e.target.value);
-                        calculateDays(e.target.value, endDate);
-                      }}
+                      onChange={onStartChange}
                     />
                   </div>
                   <div className="form-group">
@@ -135,10 +227,7 @@ export default function AjukanCuti() {
                     <input
                       type="date"
                       value={endDate}
-                      onChange={(e) => {
-                        setEndDate(e.target.value);
-                        calculateDays(startDate, e.target.value);
-                      }}
+                      onChange={onEndChange}
                     />
                   </div>
                   <div className="form-group small">
@@ -150,7 +239,13 @@ export default function AjukanCuti() {
                 <div className="form-row full">
                   <div className="form-group full">
                     <label>Keterangan</label>
-                    <input type="text" />
+                    <input
+                      type="text"
+                      value={keterangan}
+                      onChange={(e) => setKeterangan(e.target.value)}
+                      name="keterangan"
+                      id="keterangan"
+                    />                  
                   </div>
                 </div>
 

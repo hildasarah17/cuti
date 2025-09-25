@@ -1,9 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 # Import Routers
 import routers.auth as auth
-
+import routers.cuti as cuti
+import routers.approve as approve
+import routers.profile as profile
 
 # Inisialisasi App
 app = FastAPI(
@@ -21,11 +24,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Mount folder uploads setelah app dibuat
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 # Register Router
 app.include_router(auth.router)
-
+app.include_router(cuti.router)
+app.include_router(approve.router)
+app.include_router(profile.router)
 
 # Root Endpoint
 @app.get("/")
 def root():
-    return {"message": "✅ API Lembur is running"}
+    return {"message": "✅ API cuti berjalan"}

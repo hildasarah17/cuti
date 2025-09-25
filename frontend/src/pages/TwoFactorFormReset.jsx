@@ -6,16 +6,39 @@ import "../styles/twofactorformreset.css";
 
 export default function TwoFactorFormReset() {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
+  const [idKaryawan, setIdKaryawan] = useState(localStorage.getItem("forgotId") || "");
+  const [jawaban1, setJawaban1] = useState("");
+  const [jawaban2, setJawaban2] = useState("");
+  const [jawaban3, setJawaban3] = useState("");
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowModal(true);
-  };
+    try {
+      if (!idKaryawan) {
+        setError("ID Karyawan wajib diisi.");
+        return;
+      }
 
-  const handleConfirm = () => {
-    setShowModal(false);
-    navigate("/resetpassword");
+      const res = await fetch("http://localhost:8000/auth/forgot-password/verify-2fa", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_karyawan: idKaryawan, jawaban1, jawaban2, jawaban3 }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(data.detail || "Verifikasi gagal");
+        return;
+      }
+
+      const data = await res.json();
+      localStorage.setItem("resetId", data.id_karyawan);
+
+      navigate("/resetpassword");
+    } catch (err) {
+      setError("Terjadi kesalahan server");
+    }
   };
 
   return (
@@ -39,17 +62,44 @@ export default function TwoFactorFormReset() {
 
         <form className="form-box" onSubmit={handleSubmit}>
           <div className="form-group">
+            <label>ID Karyawan</label>
+            <input
+              type="text"
+              required
+              value={idKaryawan}
+              onChange={(e) => setIdKaryawan(e.target.value)}
+            />
+          </div>
+
+          <div className="form-group">
             <label>1. Siapa nama hewan peliharaan pertama Anda?</label>
-            <input type="text" required />
+            <input
+              type="text"
+              required
+              value={jawaban1}
+              onChange={(e) => setJawaban1(e.target.value)}
+            />
           </div>
           <div className="form-group">
             <label>2. Apa nama sekolah dasar Anda?</label>
-            <input type="text" required />
+            <input
+              type="text"
+              required
+              value={jawaban2}
+              onChange={(e) => setJawaban2(e.target.value)}
+            />
           </div>
           <div className="form-group">
             <label>3. Di kota mana ibu Anda lahir?</label>
-            <input type="text" required />
+            <input
+              type="text"
+              required
+              value={jawaban3}
+              onChange={(e) => setJawaban3(e.target.value)}
+            />
           </div>
+
+          {error && <p className="error-message">{error}</p>}
 
           <div className="button-container">
             <button type="submit" className="btn-save">
@@ -58,26 +108,6 @@ export default function TwoFactorFormReset() {
           </div>
         </form>
       </div>
-
-      {/* Modal Konfirmasi */}
-      {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <p>Apakah anda yakin ingin menyimpan jawaban anda saat ini?</p>
-            <div className="modal-buttons">
-              <button
-                className="btn-cancel"
-                onClick={() => setShowModal(false)}
-              >
-                Batal
-              </button>
-              <button className="btn-confirm" onClick={handleConfirm}>
-                Iya
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

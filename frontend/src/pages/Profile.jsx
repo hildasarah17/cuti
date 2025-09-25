@@ -1,5 +1,4 @@
-// Profile.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   FaHome,
@@ -25,16 +24,16 @@ export default function Profile() {
   const [showPassword, setShowPassword] = useState(false);
 
   const [profile, setProfile] = useState({
-    idKaryawan: "211322890",
-    nama: "Approval",
-    email: "ApprovalNusantaraCorp@gmail.com",
-    password: "nusantara123",
-    tempatLahir: "Bandung",
-    tanggalLahir: "14 Februari 1997",
-    jenisKelamin: "Laki-laki",
-    agama: "Islam",
-    alamat: "Jln.Merdeka No 30",
-    status: "Aktif",
+    idKaryawan: "",
+    nama: "",
+    email: "",
+    password: "",
+    tempatLahir: "",
+    tanggalLahir: "",
+    jenisKelamin: "",
+    agama: "",
+    alamat: "",
+    status: "",
     avatar: UserAvatar,
   });
 
@@ -44,57 +43,125 @@ export default function Profile() {
     alamat: false,
   });
 
-  // state untuk feedback UI
   const [feedback, setFeedback] = useState({
     email: "",
     alamat: "",
   });
+
+  const API_URL = "http://localhost:8000/profile"; // ganti sesuai backend
+
+  // ========================
+  // FETCH PROFILE DARI BACKEND
+  // ========================
+  useEffect(() => {
+    const idKaryawan = localStorage.getItem("id_karyawan"); // ambil dari login
+      if (!idKaryawan) return; // kalau belum login
+
+    fetch(`${API_URL}/${idKaryawan}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === "success") {
+          const k = data.data;
+          setProfile({
+            idKaryawan: k.id_karyawan,
+            nama: k.nama,
+            email: k.email,
+            password: k.password,
+            tempatLahir: k.tempat_lahir,
+            tanggalLahir: k.tanggal_lahir,
+            jenisKelamin: k.jenis_kelamin,
+            agama: k.agama,
+            alamat: k.alamat,
+            status: k.status,
+            avatar: k.foto || UserAvatar,
+          });
+        }
+      })
+      .catch((err) => console.error("Error fetch profile:", err));
+  }, []);
+
+  // ========================
+  // HANDLE SAVE & UPDATE BACKEND
+  // ========================
+  const handleSave = async (field, value) => {
+    let message = "";
+
+    if (field === "email") {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        message = "Email harus dalam format yang benar (contoh: user@mail.com)";
+        setFeedback((prev) => ({ ...prev, [field]: message }));
+        return;
+      }
+    }
+
+    const idKaryawan = profile.idKaryawan;
+
+    // Kirim ke backend
+    const formData = new FormData();
+    formData.append("email", field === "email" ? value : profile.email);
+    formData.append("password", field === "password" ? value : profile.password);
+    formData.append("alamat", field === "alamat" ? value : profile.alamat);
+
+    try {
+      const res = await fetch(`${API_URL}/${idKaryawan}`, {
+        method: "PUT",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.status === "success") {
+        // update UI
+        setProfile((prev) => ({ ...prev, [field]: value }));
+        setEditField((prev) => ({ ...prev, [field]: false }));
+
+        if (field === "alamat") message = "Alamat berhasil diubah";
+        else if (field === "email") message = "Email berhasil diubah";
+
+        setFeedback((prev) => ({ ...prev, [field]: message }));
+        setTimeout(() => setFeedback((prev) => ({ ...prev, [field]: "" })), 3000);
+      }
+    } catch (err) {
+      console.error("Error updating profile:", err);
+    }
+  };
 
   const handleEdit = (field) => {
     setEditField((prev) => ({ ...prev, [field]: true }));
     setFeedback((prev) => ({ ...prev, [field]: "" }));
   };
 
-  const handleSave = (field, value) => {
-    let message = "";
-
-    // validasi email
-    if (field === "email") {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        message = "Email harus dalam format yang benar (contoh: user@mail.com)";
-        setFeedback((prev) => ({ ...prev, [field]: message }));
-        return; // stop simpan kalau format salah
-      }
-    }
-
-    // update data
-    setProfile((prev) => ({ ...prev, [field]: value }));
-    setEditField((prev) => ({ ...prev, [field]: false }));
-
-    // set feedback sesuai field
-    if (field === "alamat") {
-      message = "Alamat berhasil diubah";
-    } else if (field === "email") {
-      message = "Email berhasil diubah";
-    }
-
-    setFeedback((prev) => ({ ...prev, [field]: message }));
-
-    // auto hilang setelah 3 detik
-    setTimeout(() => {
-      setFeedback((prev) => ({ ...prev, [field]: "" }));
-    }, 3000);
-  };
-
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const imgURL = URL.createObjectURL(file);
-      setProfile((prev) => ({ ...prev, avatar: imgURL }));
+    if (!file) return;
+    const idKaryawan = profile.idKaryawan;
+
+    const formData = new FormData();
+    formData.append("email", profile.email);
+    formData.append("password", profile.password);
+    formData.append("alamat", profile.alamat);
+    formData.append("file", file);
+
+    try {
+      const res = await fetch(`${API_URL}/${idKaryawan}`, {
+        method: "PUT",
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.status === "success") {
+        // update avatar UI
+        setProfile((prev) => ({
+          ...prev,
+          avatar: URL.createObjectURL(file),
+        }));
+      }
+    } catch (err) {
+      console.error("Error uploading avatar:", err);
     }
   };
 
+  // -----------------------------
+  // render tetap sama seperti sebelumnya
+  // -----------------------------
   return (
     <div className="profile-page-wrapper">
       {/* Sidebar */}
