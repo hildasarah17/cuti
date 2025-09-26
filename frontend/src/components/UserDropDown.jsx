@@ -8,10 +8,9 @@ export default function UserDropdown() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Hapus token / session di sini
-    localStorage.removeItem("token"); // contoh hapus token
+    localStorage.removeItem("token");
     setShowModal(false);
-    navigate("/login"); // arahkan langsung ke halaman login
+    navigate("/login");
   };
 
   return (
@@ -32,12 +31,19 @@ export default function UserDropdown() {
         <Link to="/twofactor" className="btn verify-btn">
           🔒 Verifikasi dua langkah
         </Link>
+
+{/* Menu Ganti Password */}
+<Link to="/GantiPass" className="btn change-pass-btn">
+  🔑 Ganti Password
+</Link>
+
+
         <button onClick={() => setShowModal(true)} className="btn logout-btn">
           🚪 Logout
         </button>
       </div>
 
-      {/* Modal Konfirmasi */}
+      {/* Modal Konfirmasi Logout */}
       {showModal && (
         <div className="modal-overlay">
           <div className="modal-content">

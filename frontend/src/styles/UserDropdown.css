@@ -263,3 +263,15 @@
     transform: scale(1);
   }
 }
+
+/* Tombol Ganti Password */
+.change-pass-btn {
+  background: #f0f8ff; /* light blue */
+  color: #1a73e8;
+  border: 1px solid #cce0ff;
+}
+
+.change-pass-btn:hover {
+  background: #e0f0ff;
+  border-color: #99cfff;
+}

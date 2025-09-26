@@ -1,4 +1,5 @@
-import React, { useState } from "react"; 
+PersetujuanCuti.jsx
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   FaHome,
@@ -9,38 +10,117 @@ import {
 } from "react-icons/fa";
 
 import "../styles/PersetujuanCuti.css";
-
-// ✅ Import komponen dropdown
 import UserDropdown from "../components/UserDropDown.jsx";
-
-// ✅ Import asset lokal
 import Logo from "../assets/logo_blitz.png";
 import UserAvatar from "../assets/user1.png";
 
 export default function PersetujuanCuti() {
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState(false);
-
-  // State pop-up
   const [popup, setPopup] = useState({ visible: false, type: "" });
+  const [dataCuti, setDataCuti] = useState([]);
+  const [selected, setSelected] = useState(new Set());
+  const [selectAll, setSelectAll] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Dummy data cuti
-  const dataCuti = [
-    { idCuti: "892817289", idKaryawan: "211233432", nama: "Dadang", mulai: "01-08-2025", selesai: "05-08-2025", jumlah: "5 Hari", jenis: "Cuti Sakit", status: "Menunggu", ket: "Pemulihan sakit" },
-    { idCuti: "372873283", idKaryawan: "223345345", nama: "Sarinah", mulai: "03-08-2025", selesai: "05-08-2025", jumlah: "3 Hari", jenis: "Cuti Melahirkan", status: "Menunggu", ket: "Persiapan persalinan" },
-    { idCuti: "283728327", idKaryawan: "2114339056", nama: "Olivia Rodrigo", mulai: "05-08-2025", selesai: "15-08-2025", jumlah: "11 Hari", jenis: "Cuti Tahunan", status: "Menunggu", ket: "Keperluan pribadi" },
-    { idCuti: "338287728", idKaryawan: "2668176545", nama: "Riko Budiman", mulai: "07-08-2025", selesai: "09-08-2025", jumlah: "3 Hari", jenis: "Cuti Sakit", status: "Menunggu", ket: "Pemulihan sakit" },
-    { idCuti: "778372891", idKaryawan: "227878767", nama: "Natasha Wilona", mulai: "15-08-2025", selesai: "20-08-2025", jumlah: "6 Hari", jenis: "Cuti Melahirkan", status: "Menunggu", ket: "Rawat kandungan" },
-  ];
+  const API_BASE = "http://localhost:8000";
 
-  // Handler tombol
+  useEffect(() => {
+    loadPending();
+  }, []);
+
+  const getHeaders = () => {
+    const headers = {
+      "Content-Type": "application/json",
+      // role & id karyawan diambil dari localStorage (sesuaikan aplikasi real dengan JWT)
+      "X-User-Role": localStorage.getItem("role") || "karyawan",
+      "X-Id-Karyawan": localStorage.getItem("id_karyawan") || "",
+    };
+    return headers;
+  };
+
+  const loadPending = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(`${API_BASE}/cuti/list?status=Menunggu&per_page=200`, {
+        headers: getHeaders(),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(()=>({detail:'Gagal ambil data'}));
+        throw new Error(err.detail || "Gagal mengambil data");
+      }
+      const body = await res.json();
+      setDataCuti(body.data.items || []);
+      setSelected(new Set());
+      setSelectAll(false);
+    } catch (err) {
+      console.error(err);
+      setError(err.message || "Terjadi kesalahan saat memuat data");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleSelect = (id) => {
+    const s = new Set(selected);
+    if (s.has(id)) s.delete(id);
+    else s.add(id);
+    setSelected(s);
+    setSelectAll(s.size === dataCuti.length && dataCuti.length > 0);
+  };
+
+  const toggleSelectAll = () => {
+    if (selectAll) {
+      setSelected(new Set());
+      setSelectAll(false);
+    } else {
+      const allIds = new Set(dataCuti.map((d) => d.id_cuti));
+      setSelected(allIds);
+      setSelectAll(true);
+    }
+  };
+
   const handleAction = (type) => {
+    if (selected.size === 0) {
+      alert("Pilih minimal 1 pengajuan untuk melakukan aksi.");
+      return;
+    }
     setPopup({ visible: true, type });
   };
 
-  const confirmAction = () => {
-    alert(`Cuti berhasil di${popup.type === "approve" ? "setujui" : "tolak"}.`);
+  const confirmAction = async () => {
+    const status = popup.type === "approve" ? "Disetujui" : "Ditolak";
+    const ids = Array.from(selected);
     setPopup({ visible: false, type: "" });
+
+    // lakukan request ke backend
+    try {
+      setLoading(true);
+      const res = await fetch(`${API_BASE}/cuti/bulk-status`, {
+        method: "PUT",
+        headers: getHeaders(),
+        body: JSON.stringify({
+          ids: ids,
+          status: status,
+          id_approval: parseInt(localStorage.getItem("id_karyawan")) || null,
+        }),
+      });
+      const body = await res.json();
+      if (!res.ok) {
+        throw new Error((body && body.detail) || body.message || "Gagal update status");
+      }
+
+      alert(body.message || "Berhasil memperbarui status");
+      // refresh daftar
+      await loadPending();
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan: " + (err.message || err));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -90,13 +170,13 @@ export default function PersetujuanCuti() {
         </header>
 
         {/* Main Body - Tabel Persetujuan */}
-        <div className="main-content">
-          <h3>Persetujuan Cuti</h3>
-
-          <div className="approval-table">
+        <div className="approval-table">
             <table>
               <thead>
                 <tr>
+                  <th>
+                    <input type="checkbox" checked={selectAll} onChange={toggleSelectAll} />
+                  </th>
                   <th>ID Cuti</th>
                   <th>ID Karyawan</th>
                   <th>Nama Karyawan</th>
@@ -106,39 +186,55 @@ export default function PersetujuanCuti() {
                   <th>Jenis Cuti</th>
                   <th>Status</th>
                   <th>Keterangan</th>
-                  <th>Pilih</th>
                 </tr>
               </thead>
               <tbody>
-                {dataCuti.map((cuti, index) => (
-                  <tr key={index}>
-                    <td>{cuti.idCuti}</td>
-                    <td>{cuti.idKaryawan}</td>
-                    <td>{cuti.nama}</td>
-                    <td>{cuti.mulai}</td>
-                    <td>{cuti.selesai}</td>
-                    <td>{cuti.jumlah}</td>
-                    <td>{cuti.jenis}</td>
-                    <td>{cuti.status}</td>
-                    <td>{cuti.ket}</td>
+                {dataCuti.map((cuti) => (
+                  <tr key={cuti.id_cuti}>
                     <td>
-                      <input type="checkbox" />
+                      <input
+                        type="checkbox"
+                        checked={selected.has(cuti.id_cuti)}
+                        onChange={() => toggleSelect(cuti.id_cuti)}
+                      />
                     </td>
+                    <td>{cuti.id_cuti}</td>
+                    <td>{cuti.id_karyawan}</td>
+                    <td>{cuti.nama_karyawan}</td>
+                    <td>{cuti.tanggal_mulai}</td>
+                    <td>{cuti.tanggal_akhir}</td>
+                    <td>{cuti.jumlah}</td>
+                    <td>{cuti.jenis_cuti}</td>
+                    <td>{cuti.status}</td>
+                    <td>{cuti.keterangan}</td>
                   </tr>
                 ))}
+                {dataCuti.length === 0 && (
+                  <tr>
+                    <td colSpan={10} style={{ textAlign: "center" }}>
+                      Tidak ada pengajuan cuti menunggu.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
+
           {/* Tombol Aksi */}
           <div className="actions">
-            <button className="btn btn-reject" onClick={() => handleAction("reject")}>
+            <button className="btn btn-reject" 
+            onClick={() => handleAction("reject")}
+            disabled={selected.size === 0 || loading}
+            >
               Tolak
             </button>
-            <button className="btn btn-approve" onClick={() => handleAction("approve")}>
+            <button className="btn btn-approve"
+            onClick={() => handleAction("approve")}
+            disabled={selected.size === 0 || loading}
+            >
               Setuju
             </button>
           </div>
-        </div>
       </main>
 
       {/* ✅ Pop-up konfirmasi */}

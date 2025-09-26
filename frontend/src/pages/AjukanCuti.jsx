@@ -1,3 +1,4 @@
+AjukanCuti.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -31,6 +32,16 @@ export default function AjukanCuti() {
   const [keterangan, setKeterangan] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // fungsi reset form saat klik batal
+  const handleCancel = () => {
+    setJenisCuti("");
+    setStartDate("");
+    setEndDate("");
+    setJumlah(0);
+    setKeterangan("");
+    setError("");
+  };
 
   useEffect(() => {
     if (!idKaryawan) return;
@@ -250,7 +261,13 @@ export default function AjukanCuti() {
                 </div>
 
                 <div className="form-actions">
-                  <button type="button" className="btn-cancel">Batal</button>
+                  <button
+                    type="button"
+                    className="btn-cancel"
+                    onClick={handleCancel}
+                  >
+                    Batal
+                  </button>
                   <button type="submit" className="btn-submit">Kirim</button>
                 </div>
               </form>

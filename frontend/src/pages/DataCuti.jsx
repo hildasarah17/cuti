@@ -1,3 +1,4 @@
+DataCuti.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
@@ -71,7 +72,7 @@ export default function DataCuti() {
       if (selectedMonth) params.append("month", selectedMonth);
       if (selectedStatus) params.append("status", selectedStatus);
 
-      const resp = await fetch('http://localhost:8000/cuti/list?${params.toString()}');
+      const resp = await fetch("http://localhost:8000/cuti/list?${params.toString()}");
       const json = await resp.json();
       console.log("fetchData response:", json); // debug
       if (json.status === "success") {

@@ -1,0 +1,255 @@
+/* Layout utama */
+.change-password-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  background: #fff;
+  font-family: "Arial", sans-serif;
+}
+
+/* Left side (65%) */
+.cp-left {
+  flex: 0 0 65%;
+  position: relative;
+  display: flex;
+  align-items: center;        /* vertikal tengah */
+  justify-content: flex-start;/* geser konten ke kiri */
+  color: #fff;
+  background: linear-gradient(180deg, #9a9a9a 0%, #6b6b6b 60%, #4b4b4b 100%);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  text-align: left;
+}
+
+/* dekorasi lingkaran */
+.cp-left::before,
+.cp-left::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(205, 197, 197, 0.06);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05) inset;
+}
+
+.cp-left::before {
+  width: 420px;
+  height: 420px;
+  left: -150px;
+  bottom: -160px;
+}
+.cp-left::after {
+  width: 320px;
+  height: 320px;
+  left: -60px;
+  bottom: -120px;
+  opacity: 0.7;
+}
+
+/* konten kiri */
+.left-inner {
+  z-index: 2;
+  max-width: 420px;
+  margin-left: 60px; /* jarak aman dari pinggir */
+}
+
+.brand-title {
+  font-size: 44px;
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.brand-sub {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 14px;
+}
+
+/* Right side (form 35%) */
+.cp-right {
+  flex: 0 0 35%;
+  background: #fff;
+  padding: 60px 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 430px;
+}
+
+.cp-right h3 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.cp-right p {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 25px;
+  line-height: 1.4;
+}
+
+/* Form */
+.cp-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cp-input-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.cp-input-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+.cp-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  padding: 8px 14px;
+  background: #fff;
+}
+
+.cp-input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+  color: #333;
+}
+
+.cp-input-wrapper .icon {
+  margin-right: 8px;
+  color: #999;
+}
+
+.cp-input-wrapper .icon-btn {
+  cursor: pointer;
+  color: #666;
+}
+
+/* Button */
+.cp-btn {
+  margin-top: 20px;
+  padding: 12px 0;
+  border: none;
+  border-radius: 25px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.cp-btn:hover {
+  background: #2563eb;
+}
+
+/* Responsif */
+@media (max-width: 900px) {
+  .change-password-container {
+    flex-direction: column;
+  }
+
+  .cp-left {
+    flex: none;
+    width: 100%;
+    height: 200px;
+    justify-content: center;
+  }
+
+  .left-inner {
+    margin-left: 0;
+    text-align: center;
+  }
+
+  .cp-right {
+    flex: none;
+    width: 100%;
+    padding: 40px 20px;
+    max-width: 100%;
+  }
+}
+
+/* Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+/* Box */
+.popup-box {
+  background: #d9d9d9;   /* abu seperti desain */
+  padding: 30px 40px;
+  border-radius: 16px;
+  text-align: center;
+  width: 380px;
+  max-width: 90%;
+  font-family: "Arial", sans-serif;
+}
+
+.popup-box p {
+  font-size: 15px;
+  color: #333;
+  margin-bottom: 25px;
+  line-height: 1.5;
+}
+
+/* Action buttons */
+.popup-actions {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.popup-actions button {
+  flex: 1;
+  max-width: 130px;
+  padding: 14px 0;
+  border: none;
+  border-radius: 50px;  /* bulat */
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.popup-actions button:hover {
+  transform: scale(1.05);
+}
+
+.no-btn {
+  background: #ef4444; /* merah */
+  color: #fff;
+}
+
+.yes-btn {
+  background: #22c55e; /* hijau */
+  color: #fff;
+}
+
+.close-btn {
+  background: #4b4b4b;
+  color: #fff;
+  border-radius: 50px;
+  padding: 12px 30px;
+  font-weight: bold;
+  font-size: 16px;
+}

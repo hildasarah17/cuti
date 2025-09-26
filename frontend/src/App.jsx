@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 
 import BerandaApproval from "./pages/BerandaApproval";
 import PersetujuanCuti from "./pages/PersetujuanCuti";
-import Profile from "./pages/Profile";
+import ProfileApproval from "./pages/Profile";
 import DataCuti from "./pages/DataCuti";
 import AjukanCuti from "./pages/AjukanCuti";
 import Notifikasi from "./pages/Notifikasi";
@@ -14,6 +14,7 @@ import TwoFactorActive from "./pages/TwoFactorActive";
 import TwoFactorFormReset from "./pages/TwoFactorFormReset";
 import ResetPassword from "./pages/ResetPassword";
 import BerandaKaryawan from "./pages/BerandaKaryawan";
+import GantiPass from "./pages/GantiPass";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -53,20 +54,19 @@ function App() {
         />
 
         <Route
-  path="/beranda"
-  element={
-    isLoggedIn ? (
-      isTwoFactorVerified ? (
-        role === "approval" ? <BerandaApproval /> : <BerandaKaryawan />
-      ) : (
-        <Navigate to="/twofactor/form" />
-      )
-    ) : (
-      <Navigate to="/login" />
-    )
-  }
-/>
-
+          path="/beranda"
+          element={
+            isLoggedIn ? (
+              isTwoFactorVerified ? (
+                role === "approval" ? <BerandaApproval /> : <BerandaKaryawan />
+              ) : (
+                <Navigate to="/twofactor/form" />
+              )
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
 
         <Route
           path="/twofactor"
@@ -90,10 +90,28 @@ function App() {
         <Route path="/resetpassword" element={<ResetPassword />} />
 
         <Route path="/persetujuan-cuti" element={<PersetujuanCuti />} />
-        <Route path="/profile" element={<Profile />} />
+
+        {/* Profile diarahkan sesuai role */}
+        <Route
+          path="/profile"
+          element={
+            isLoggedIn ? (
+              role === "approval" ? <ProfileApproval /> : <ProfileKaryawan />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
         <Route path="/data-cuti" element={<DataCuti />} />
         <Route path="/ajukan-cuti" element={<AjukanCuti />} />
         <Route path="/notifikasi" element={<Notifikasi />} />
+
+        {/* GantiPass hanya bisa diakses user login */}
+        <Route
+          path="/gantipass"
+          element={isLoggedIn ? <GantiPass /> : <Navigate to="/login" />}
+        />
       </Routes>
     </Router>
   );
