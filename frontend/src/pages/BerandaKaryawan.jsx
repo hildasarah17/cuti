@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  FaHome,
-  FaUser,
-  FaPaperPlane,
-  FaBell,
-} from "react-icons/fa";
+import { FaHome, FaUser, FaPaperPlane, FaBell } from "react-icons/fa";
 import "../styles/BerandaKaryawan.css";
 
 import UserDropdown from "../components/UserDropDown.jsx";
@@ -25,14 +20,14 @@ export default function BerandaKaryawan() {
           <img src={Logo} alt="logo" />
         </div>
         <ul>
-          <li className={location.pathname === "/beranda-karyawan" ? "active" : ""}>
-            <Link to="/beranda-karyawan"><FaHome /> Beranda</Link>
+          <li className={location.pathname === "/beranda" ? "active" : ""}>
+            <Link to="/beranda"><FaHome /> Beranda</Link>
           </li>
-          <li className={location.pathname === "/ajukancuti" ? "active" : ""}>
-            <Link to="/ajukancuti"><FaPaperPlane /> Ajukan Cuti</Link>
+          <li className={location.pathname === "/ajukan-cuti" ? "active" : ""}>
+            <Link to="/ajukan-cuti"><FaPaperPlane /> Ajukan Cuti</Link>
           </li>
-          <li className={location.pathname === "/profil" ? "active" : ""}>
-            <Link to="/profil"><FaUser /> Profil</Link>
+          <li className={location.pathname === "/profile" ? "active" : ""}>
+            <Link to="/profile"><FaUser /> Profil</Link>
           </li>
         </ul>
       </aside>

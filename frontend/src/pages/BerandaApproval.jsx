@@ -1,4 +1,3 @@
-BerandaApproval.jsx
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
@@ -58,8 +57,8 @@ export default function BerandaApproval() {
           <img src={Logo} alt="logo" />
         </div>
         <ul>
-          <li className={location.pathname === "/beranda-approval" ? "active" : ""}>
-            <Link to="/beranda-approval"><FaHome /> Beranda</Link>
+          <li className={location.pathname === "/beranda" ? "active" : ""}>
+            <Link to="/beranda"><FaHome /> Beranda</Link>
           </li>
           <li className={location.pathname === "/persetujuan-cuti" ? "active" : ""}>
             <Link to="/persetujuan-cuti"><FaClipboardList /> Persetujuan Cuti</Link>
