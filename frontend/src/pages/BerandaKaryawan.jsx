@@ -2,24 +2,18 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   FaHome,
-  FaInfoCircle,
-  FaCheckCircle,
-  FaTimesCircle,
   FaUser,
   FaPaperPlane,
   FaBell,
 } from "react-icons/fa";
 import "../styles/BerandaKaryawan.css";
 
-// component dropdown (pastikan file ada)
 import UserDropdown from "../components/UserDropDown.jsx";
-
-// asset lokal (pastikan path benar)
 import Logo from "../assets/logo_blitz.png";
 import TravelImg from "../assets/travel.png";
 import UserAvatar from "../assets/user1.png";
 
-export default function Beranda() {
+export default function BerandaKaryawan() {
   const location = useLocation();
   const [showDropdown, setShowDropdown] = useState(false);
 
@@ -31,8 +25,8 @@ export default function Beranda() {
           <img src={Logo} alt="logo" />
         </div>
         <ul>
-          <li className={location.pathname === "/beranda" ? "active" : ""}>
-            <Link to="/berandakaryawan"><FaHome /> Beranda</Link>
+          <li className={location.pathname === "/beranda-karyawan" ? "active" : ""}>
+            <Link to="/beranda-karyawan"><FaHome /> Beranda</Link>
           </li>
           <li className={location.pathname === "/ajukancuti" ? "active" : ""}>
             <Link to="/ajukancuti"><FaPaperPlane /> Ajukan Cuti</Link>
@@ -66,7 +60,6 @@ export default function Beranda() {
 
         {/* Main Body */}
         <div className="main-content">
-          {/* PAGE TITLE (di atas welcome card) */}
           <h1 className="page-title">Beranda</h1>
 
           {/* Greeting Section */}
@@ -91,10 +84,9 @@ export default function Beranda() {
             </div>
           </div>
 
-          {/* SECTION TITLE (di luar table, sesuai permintaan) */}
+          {/* SECTION TITLE */}
           <h3 className="section-title">Data Cuti Saya</h3>
 
-          {/* Table container */}
           <div className="approval-table">
             <table>
               <thead>
@@ -157,7 +149,6 @@ export default function Beranda() {
               </tbody>
             </table>
           </div>
-
         </div>
       </main>
     </div>

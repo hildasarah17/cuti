@@ -49,6 +49,10 @@ export default function LoginPage({ onLogin }) {
       });
 
       const data = await response.json();
+      console.log("=== RESPON BACKEND ===", data);
+      console.log("Next Step:", data.next_step);
+      console.log("Role:", data?.user?.role);
+
 
       if (!response.ok) {
         setErrorMessage("❌ Login gagal: " + (data.detail || "Terjadi kesalahan"));
@@ -57,19 +61,20 @@ export default function LoginPage({ onLogin }) {
 
       console.log("Login sukses:", data);
 
-      // Simpan id_karyawan & login status
+      // Simpan id_karyawan, role & login status
       localStorage.setItem("id_karyawan", data.user.id_karyawan);
+      localStorage.setItem("role", data.user.role); // 🔑 simpan role
       localStorage.setItem("isLoggedIn", "true");
 
-      if (onLogin) onLogin();
 
-      // 🔑 Ikuti instruksi backend
+      if (onLogin) onLogin(data.user.role);
+
       if (data.next_step === "dashboard") {
         localStorage.setItem("twoFactorVerified", "true");
-        navigate("/beranda");
+        navigate("/beranda"); // biarkan App.jsx yg tentukan approval/karyawan
       } else if (data.next_step === "2fa") {
         localStorage.removeItem("twoFactorVerified");
-        navigate("/twofactor/form");
+        navigate("/twofactor");
       }
 
     } catch (err) {

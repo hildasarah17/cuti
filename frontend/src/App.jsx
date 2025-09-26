@@ -13,25 +13,23 @@ import TwoFactorForm from "./pages/TwoFactorForm";
 import TwoFactorActive from "./pages/TwoFactorActive";
 import TwoFactorFormReset from "./pages/TwoFactorFormReset";
 import ResetPassword from "./pages/ResetPassword";
+import BerandaKaryawan from "./pages/BerandaKaryawan";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isTwoFactorVerified, setIsTwoFactorVerified] = useState(false);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const loggedIn = localStorage.getItem("isLoggedIn");
     const twoFactorStatus = localStorage.getItem("twoFactorVerified");
+    const savedRole = localStorage.getItem("role");
 
-    if (loggedIn === "true") {
-      setIsLoggedIn(true);
-    }
-    if (twoFactorStatus === "true") {
-      setIsTwoFactorVerified(true);
-    }
+    if (loggedIn === "true") setIsLoggedIn(true);
+    if (twoFactorStatus === "true") setIsTwoFactorVerified(true);
+    if (savedRole) setRole(savedRole);
   }, []);
 
-
-  // simpan ke localStorage kalau 2FA sudah diaktifkan
   const handleTwoFactorVerified = () => {
     setIsTwoFactorVerified(true);
     localStorage.setItem("twoFactorVerified", "true");
@@ -40,34 +38,44 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Default route ke login */}
         <Route path="/" element={<Navigate to="/login" />} />
 
-        {/* Login */}
         <Route
           path="/login"
-          element={<LoginPage onLogin={() => setIsLoggedIn(true)} />}
+          element={
+            <LoginPage
+              onLogin={(role) => {
+                setIsLoggedIn(true);
+                setRole(role);
+              }}
+            />
+          }
         />
 
+        <Route
+  path="/beranda"
+  element={
+    isLoggedIn ? (
+      isTwoFactorVerified ? (
+        role === "approval" ? <BerandaApproval /> : <BerandaKaryawan />
+      ) : (
+        <Navigate to="/twofactor/form" />
+      )
+    ) : (
+      <Navigate to="/login" />
+    )
+  }
+/>
 
 
-        {/* Two Factor: langkah 1 */}
         <Route
           path="/twofactor"
-          element={
-            !isLoggedIn ? <Navigate to="/login" /> : <TwoFactorPage />
-          }
+          element={!isLoggedIn ? <Navigate to="/login" /> : <TwoFactorPage />}
         />
-
-        {/* Two Factor: langkah 2 (form pertanyaan) */}
         <Route
           path="/twofactor/form"
-          element={
-            !isLoggedIn ? <Navigate to="/login" /> : <TwoFactorForm />
-          }
+          element={!isLoggedIn ? <Navigate to="/login" /> : <TwoFactorForm />}
         />
-
-        {/* Two Factor: langkah 3 (active) */}
         <Route
           path="/twofactor/active"
           element={
@@ -78,24 +86,9 @@ function App() {
             )
           }
         />
+        <Route path="/twofactor/reset" element={<TwoFactorFormReset />} />
+        <Route path="/resetpassword" element={<ResetPassword />} />
 
-          {/* Reset Password Flow */}
-          <Route path="/twofactor/reset" element={<TwoFactorFormReset />} />
-          <Route path="/resetpassword" element={<ResetPassword />} />
-
-        {/* Beranda hanya bisa diakses kalau sudah login + 2FA */}
-        <Route
-          path="/beranda"
-          element={
-            isLoggedIn && isTwoFactorVerified ? (
-              <BerandaApproval />
-            ) : (
-              <Navigate to="/login" />
-            )
-          }
-        />
-
-        {/* Halaman lain */}
         <Route path="/persetujuan-cuti" element={<PersetujuanCuti />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/data-cuti" element={<DataCuti />} />

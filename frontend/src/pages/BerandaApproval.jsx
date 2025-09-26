@@ -47,7 +47,7 @@ export default function BerandaApproval() {
   }, []);
 
   const handleFilterClick = (status) => {
-    navigate("/data-cuti?status=${status}");
+    navigate(`/data-cuti?status=${status}`);
   };
 
   return (
@@ -58,8 +58,8 @@ export default function BerandaApproval() {
           <img src={Logo} alt="logo" />
         </div>
         <ul>
-          <li className={location.pathname === "/" ? "active" : ""}>
-            <Link to="/"><FaHome /> Beranda</Link>
+          <li className={location.pathname === "/beranda-approval" ? "active" : ""}>
+            <Link to="/beranda-approval"><FaHome /> Beranda</Link>
           </li>
           <li className={location.pathname === "/persetujuan-cuti" ? "active" : ""}>
             <Link to="/persetujuan-cuti"><FaClipboardList /> Persetujuan Cuti</Link>

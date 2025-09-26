@@ -7,19 +7,20 @@ export default function TwoFactorActive({ onVerify }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // otomatis set verified ketika sampai sini
     if (onVerify) {
       onVerify();
     }
-  }, [onVerify]);
+    localStorage.setItem("twoFactorVerified", "true");
+    navigate("/beranda");  // ⬅️ otomatis masuk dashboard sesuai role
+  }, [onVerify, navigate]);
 
   const handleDisable = () => {
-    navigate("/twofactor"); // balik ke halaman nyalakan
+    localStorage.removeItem("twoFactorVerified");
+    navigate("/twofactor");
   };
 
   return (
     <div className="twofactor-container">
-      {/* Panah ke beranda */}
       <button className="back-button" onClick={() => navigate("/beranda")}>
         <ArrowLeft size={22} />
       </button>
@@ -28,8 +29,7 @@ export default function TwoFactorActive({ onVerify }) {
         <h1 className="title">Verifikasi Dua Langkah</h1>
         <p className="description">
           Verifikasi dua langkah dinyalakan, akun anda sudah dilindungi dengan
-          keamanan tambahan. Anda dapat menggunakan verifikasi ini untuk
-          mengidentifikasi diri saat lupa password.
+          keamanan tambahan.
         </p>
 
         <button className="btn-disable" onClick={handleDisable}>
